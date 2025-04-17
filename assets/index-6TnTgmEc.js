@@ -14152,46 +14152,34 @@ const CardPreview = ({ cardNumbers, expireDate }) => {
   return /* @__PURE__ */ jsxs(StyledCardContainer, { children: [
     /* @__PURE__ */ jsx$1(StyledICCheapContainer, {}),
     cardTypeCheck() && /* @__PURE__ */ jsx$1(StyledCardTypeIcon, { src: cardTypeCheck(), alt: "cardType" }),
-    /* @__PURE__ */ jsxs(
-      Flex,
-      {
-        direction: "column",
-        alignItems: "flex-start",
-        width: "300px",
-        height: "200px",
-        margin: "0 auto",
-        padding: "20px 0 0 0",
-        gap: "10px",
-        children: [
-          /* @__PURE__ */ jsx$1(Flex, { gap: "20px", height: "36px", children: cardNumbers.map((str, index) => /* @__PURE__ */ jsx$1(
-            "div",
-            {
-              css: css`
+    /* @__PURE__ */ jsxs(Flex, { direction: "column", alignItems: "flex-start", padding: "70px 25px 0px 25px", gap: "10px", children: [
+      /* @__PURE__ */ jsx$1(Flex, { gap: "20px", children: cardNumbers.map((str, index) => /* @__PURE__ */ jsx$1(
+        "div",
+        {
+          css: css`
                 width: 60px;
                 height: 36px;
                 text-align: left;
               `,
-              children: /* @__PURE__ */ jsx$1(Text, { variant: "Title", fontWeight: "regular", color: "white", children: getDisplayCardNumber(Number(str.value), index) }, `${str}-${index}`)
-            },
-            `card-number-${index}`
-          )) }),
-          /* @__PURE__ */ jsx$1(Flex, { gap: "20px", height: "36px", children: /* @__PURE__ */ jsx$1(
-            Text,
-            {
-              variant: "Title",
-              fontWeight: "regular",
-              color: "white",
-              css: css`
-              width: 100px;
-              height: 36px;
-              text-align: left;
-            `,
-              children: expireDate[0].value ? expireDate.map((date) => date.value).join(" / ") : ""
-            }
-          ) })
-        ]
-      }
-    )
+          children: /* @__PURE__ */ jsx$1(Text, { variant: "Title", fontWeight: "regular", color: "white", children: getDisplayCardNumber(Number(str.value), index) }, `${str}-${index}`)
+        },
+        `card-number-${index}`
+      )) }),
+      /* @__PURE__ */ jsx$1(
+        Text,
+        {
+          variant: "Title",
+          fontWeight: "regular",
+          color: "white",
+          css: css`
+            width: 100px;
+            height: 36px;
+            text-align: left;
+          `,
+          children: expireDate[0].value ? expireDate.map((date) => date.value).join(" / ") : ""
+        }
+      )
+    ] })
   ] });
 };
 function App() {
