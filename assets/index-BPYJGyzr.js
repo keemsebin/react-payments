@@ -18251,7 +18251,7 @@ const Select = ({ selectedOptions, children, ...props }) => {
   return /* @__PURE__ */ jsxs(StyledSelectContainer, { onClick: () => setIsOpen(!isOpen), ...props, children: [
     /* @__PURE__ */ jsx$1(StyledTriggerButton, { children: /* @__PURE__ */ jsxs(Flex, { justifyContent: "space-between", children: [
       /* @__PURE__ */ jsx$1(Text, { variant: "Body", children: selectedOptions ?? "전체" }),
-      /* @__PURE__ */ jsx$1(StyledSelectIcon, { isOpen, src: "/images/arrow.png", alt: "arrow" })
+      /* @__PURE__ */ jsx$1(StyledSelectIcon, { isOpen, src: "./images/arrow.png", alt: "arrow" })
     ] }) }),
     isOpen && /* @__PURE__ */ jsx$1(StyledOptionsContainer, { children })
   ] });
@@ -18966,7 +18966,7 @@ const Confirm = () => {
     ] }) });
   }
   return /* @__PURE__ */ jsx$1(Flex, { width: "100%", height: "100dvh", children: /* @__PURE__ */ jsxs(Flex, { direction: "column", width: "100%", gap: "40px", padding: "0 30px", children: [
-    /* @__PURE__ */ jsx$1("img", { src: "/images/check.png", width: 80 }),
+    /* @__PURE__ */ jsx$1("img", { src: "./images/check.png", width: 80 }),
     /* @__PURE__ */ jsx$1(
       Text,
       {
