@@ -13518,19 +13518,16 @@ var Action;
   Action2["Replace"] = "REPLACE";
 })(Action || (Action = {}));
 const PopStateEventType = "popstate";
-function createHashHistory(options) {
+function createBrowserHistory(options) {
   if (options === void 0) {
     options = {};
   }
-  function createHashLocation(window2, globalHistory) {
+  function createBrowserLocation(window2, globalHistory) {
     let {
-      pathname = "/",
-      search = "",
-      hash: hash2 = ""
-    } = parsePath(window2.location.hash.substr(1));
-    if (!pathname.startsWith("/") && !pathname.startsWith(".")) {
-      pathname = "/" + pathname;
-    }
+      pathname,
+      search,
+      hash: hash2
+    } = window2.location;
     return createLocation(
       "",
       {
@@ -13543,20 +13540,10 @@ function createHashHistory(options) {
       globalHistory.state && globalHistory.state.key || "default"
     );
   }
-  function createHashHref(window2, to) {
-    let base = window2.document.querySelector("base");
-    let href = "";
-    if (base && base.getAttribute("href")) {
-      let url = window2.location.href;
-      let hashIndex = url.indexOf("#");
-      href = hashIndex === -1 ? url : url.slice(0, hashIndex);
-    }
-    return href + "#" + (typeof to === "string" ? to : createPath(to));
+  function createBrowserHref(window2, to) {
+    return typeof to === "string" ? to : createPath(to);
   }
-  function validateHashLocation(location, to) {
-    warning(location.pathname.charAt(0) === "/", "relative pathnames are not supported in hash history.push(" + JSON.stringify(to) + ")");
-  }
-  return getUrlBasedHistory(createHashLocation, createHashHref, validateHashLocation, options);
+  return getUrlBasedHistory(createBrowserLocation, createBrowserHref, null, options);
 }
 function invariant(value, message) {
   if (value === false || value === null || typeof value === "undefined") {
@@ -13669,7 +13656,6 @@ function getUrlBasedHistory(getLocation, createHref, validateLocation, options) 
   function push(to, state) {
     action = Action.Push;
     let location = createLocation(history.location, to, state);
-    if (validateLocation) validateLocation(location, to);
     index2 = getIndex() + 1;
     let historyState = getHistoryState(location, index2);
     let url = history.createHref(location);
@@ -13692,7 +13678,6 @@ function getUrlBasedHistory(getLocation, createHref, validateLocation, options) 
   function replace2(to, state) {
     action = Action.Replace;
     let location = createLocation(history.location, to, state);
-    if (validateLocation) validateLocation(location, to);
     index2 = getIndex();
     let historyState = getHistoryState(location, index2);
     let url = history.createHref(location);
@@ -17407,13 +17392,13 @@ try {
   window.__reactRouterVersion = REACT_ROUTER_VERSION;
 } catch (e) {
 }
-function createHashRouter(routes, opts) {
+function createBrowserRouter(routes, opts) {
   return createRouter({
     basename: void 0,
     future: _extends({}, void 0, {
       v7_prependBasename: true
     }),
-    history: createHashHistory({
+    history: createBrowserHistory({
       window: void 0
     }),
     hydrationData: parseHydrationData(),
@@ -19007,7 +18992,7 @@ const NotFound = () => {
     /* @__PURE__ */ jsx$1(Button, { isRounded: true, onClick: goActiveCard, children: "카드 등록하기" })
   ] }) });
 };
-const router = createHashRouter([
+const router = createBrowserRouter([
   {
     path: "card",
     element: /* @__PURE__ */ jsx$1(App, {}),
