@@ -18246,12 +18246,13 @@ const StyledOption = newStyled.div`
     background-color: rgba(205, 205, 205, 0.63);
   }
 `;
+const Arrow = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEgAAABICAYAAABV7bNHAAAACXBIWXMAACE4AAAhOAFFljFgAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAGkSURBVHgB7djdacMwFIbh45LcZ48QSEfoBhkh3SCbdIQmE3SEdATfJNcdIfcGu/qoCiY4zrEt6cjwPWBsg3/Ei60LiRAREREREREREREREc1Bob1ws9nsmqbZLhaLY1mWPzIzY8evCrRerz/c7uBPb257u1wupcyEG/+n2+396W25XL5qI72IzqF1vHLb2b10KzNwFwdWVVXttPerAhVFcf+1zCJSR5x/N1FSBXL/7nvHQ7OO1BPn5KaHoyipJ2kf4ix/Ydqym5OexNnLAOpA/sXZRwoZBwYF8gPINlLoODA4kB9IdpFixIFRgUTyihQrDowOBDlEihkHJgUCy0ix48DkQGARKUUcCBIIUkZKFQeCBYIUkVLGgaCBIGak1HEgeCCIEckiDkQJBCEjWcWBaIEgRCTLOBA1EEyJZB0HogeCMZFyiANJAsGQSLnEgWSBQBMppziQNBD0RXJr399ueXfXcZtJHEgeCHoidTGLAyaBQBnJNA6YBYInkczjgGkgeBApizhgHgh8pC83Sa/quj5dr9eDEBERERERERERERERtf0Cr1QewsBPeIMAAAAASUVORK5CYII=";
 const Select = ({ selectedOptions, children, ...props }) => {
   const [isOpen, setIsOpen] = reactExports.useState(false);
   return /* @__PURE__ */ jsxs(StyledSelectContainer, { onClick: () => setIsOpen(!isOpen), ...props, children: [
     /* @__PURE__ */ jsx$1(StyledTriggerButton, { children: /* @__PURE__ */ jsxs(Flex, { justifyContent: "space-between", children: [
       /* @__PURE__ */ jsx$1(Text, { variant: "Body", children: selectedOptions ?? "전체" }),
-      /* @__PURE__ */ jsx$1(StyledSelectIcon, { isOpen, src: "/public/images/arrow.png", alt: "arrow" })
+      /* @__PURE__ */ jsx$1(StyledSelectIcon, { isOpen, src: Arrow, alt: "arrow" })
     ] }) }),
     isOpen && /* @__PURE__ */ jsx$1(StyledOptionsContainer, { children })
   ] });
@@ -18943,6 +18944,7 @@ const CardForm = () => {
     ] }) })
   ] });
 };
+const Check = "/react-payments/assets/check-BLlBab1k.png";
 const Confirm = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -18966,7 +18968,7 @@ const Confirm = () => {
     ] }) });
   }
   return /* @__PURE__ */ jsx$1(Flex, { width: "100%", height: "100dvh", children: /* @__PURE__ */ jsxs(Flex, { direction: "column", width: "100%", gap: "40px", padding: "0 30px", children: [
-    /* @__PURE__ */ jsx$1("img", { src: "/public/images/check.png", width: 80 }),
+    /* @__PURE__ */ jsx$1("img", { src: Check, width: 80 }),
     /* @__PURE__ */ jsx$1(
       Text,
       {
