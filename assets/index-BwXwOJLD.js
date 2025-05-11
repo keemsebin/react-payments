@@ -21581,7 +21581,7 @@ const CardInputLayout = ({ headerText, description, label, children }) => {
       flex: 0,
       css: css`
         max-width: 500px;
-        animation: ${mounted ? fadeInUp : "none"} 0.3s ease-out;
+        animation: ${mounted ? fadeInUp : "none"} 0.5s ease-out;
       `,
       children: [
         /* @__PURE__ */ jsx$1(Text, { variant: "Title", fontWeight: "bold", children: headerText }),
@@ -21604,35 +21604,35 @@ const CardInputLayout = ({ headerText, description, label, children }) => {
 };
 const CARD_BRAND = {
   BC카드: {
-    image: "/images/Card/BC.svg",
+    image: "./images/Card/BC.svg",
     color: "#F04651"
   },
   신한카드: {
-    image: "/images/Card/Shinhan.svg",
+    image: "./images/Card/Shinhan.svg",
     color: "#0046FF"
   },
   카카오뱅크: {
-    image: "/images/Card/KaKao.svg",
+    image: "./images/Card/KaKao.svg",
     color: "#FFE600"
   },
   현대카드: {
-    image: "/images/Card/Hyundai.svg",
+    image: "./images/Card/Hyundai.svg",
     color: "#000000"
   },
   우리카드: {
-    image: "/images/Card/Woori.svg",
+    image: "./images/Card/Woori.svg",
     color: "#007BC8"
   },
   롯데카드: {
-    image: "/images/Card/Lotte.svg",
+    image: "./images/Card/Lotte.svg",
     color: "#ED1C24"
   },
   하나카드: {
-    image: "/images/Card/Hana.svg",
+    image: "./images/Card/Hana.svg",
     color: "#009490"
   },
   국민카드: {
-    image: "/images/Card/KB.svg",
+    image: "./images/Card/KB.svg",
     color: "#6A6056"
   }
 };
@@ -21735,14 +21735,16 @@ const useCardForm = () => {
 const BrandForm = ({ onNext }) => {
   const { formData: brandFormData, dispatch: setBrandFormData } = useCardForm();
   const { isOpen, handleOpenModal, handleCloseModal } = wn();
-  const handleClickOption = (option) => {
-    console.log("option", option);
-    setBrandFormData({
-      type: "BRAND",
-      payload: { ...brandFormData, brand: option }
-    });
-    onNext();
-  };
+  const handleClickOption = reactExports.useCallback(
+    (option) => {
+      setBrandFormData({
+        type: "BRAND",
+        payload: { ...brandFormData, brand: option }
+      });
+      onNext();
+    },
+    [brandFormData, onNext, setBrandFormData]
+  );
   return /* @__PURE__ */ jsxs(Fragment, { children: [
     /* @__PURE__ */ jsx$1(
       CardInputLayout,
@@ -21874,7 +21876,7 @@ const useCardNumber = ({ cardNumbers, setCardNumbers, onValid }) => {
         onValid();
       }
     },
-    [cardNumbers]
+    [cardNumbers, moveFocusToNext, onValid, setCardNumbers, validateInput]
   );
   const setInputRef = reactExports.useCallback((el, index) => {
     if (el) inputRefs.current[index] = el;
@@ -22224,11 +22226,23 @@ const StyledButton = newStyled.button`
 const Button = ({ isRounded = false, children, ...props }) => {
   return /* @__PURE__ */ jsx$1(StyledButton, { isRounded, ...props, children: /* @__PURE__ */ jsx$1(Text, { variant: "Body", color: "white", children }) });
 };
-const CardFormLayout = ({ disabled = true, onSubmit, children }) => {
-  const handleSubmit = () => {
-    onSubmit();
+const CardFormLayout = ({ children }) => {
+  const { formData } = useCardForm();
+  const navigate = useNavigate();
+  const isFilledAndValid = (item) => item.value !== "" && item.isValid;
+  const allValid = formData.cardNumber.every(isFilledAndValid) && formData.expireDate.every(isFilledAndValid) && isFilledAndValid(formData.cvc) && isFilledAndValid(formData.password) && formData.brand !== null;
+  console.log("formData", formData);
+  const handleCardFormSubmit = (e2) => {
+    e2.preventDefault();
+    if (!allValid) return;
+    navigate("/card/confirm", {
+      state: {
+        cardNumber: formData.cardNumber[0],
+        brand: formData.brand
+      }
+    });
   };
-  return /* @__PURE__ */ jsxs(CardFormStyled, { onSubmit: handleSubmit, children: [
+  return /* @__PURE__ */ jsxs(CardFormStyled, { onSubmit: handleCardFormSubmit, children: [
     /* @__PURE__ */ jsx$1(
       Flex,
       {
@@ -22249,7 +22263,7 @@ const CardFormLayout = ({ disabled = true, onSubmit, children }) => {
           bottom: 0;
           width: 100%;
         `,
-        children: /* @__PURE__ */ jsx$1(Button, { type: "submit", disabled, children: "확인" })
+        children: /* @__PURE__ */ jsx$1(Button, { type: "submit", disabled: !allValid, children: "확인" })
       }
     )
   ] });
@@ -22432,22 +22446,9 @@ const useStack = (stepNames) => {
   return { Stack, setStep };
 };
 const CardForm = () => {
-  const navigate = useNavigate();
   const { Stack, setStep } = useStack(STEPS.CARD_NUMBER);
   const { isOpen, handleOpenModal, handleCloseModal } = wn();
-  const { formData } = useCardForm();
   const modalShownRef = reactExports.useRef(false);
-  const isFilledAndValid = (item) => item.value !== "" && item.isValid;
-  const allValid = formData.cardNumber.every(isFilledAndValid) && formData.expireDate.every(isFilledAndValid) && isFilledAndValid(formData.cvc) && isFilledAndValid(formData.password) && formData.brand !== null;
-  const handleCardFormSubmit = () => {
-    if (!allValid) return;
-    navigate("/card/confirm", {
-      state: {
-        cardNumber: formData.cardNumber[0],
-        brand: formData.brand
-      }
-    });
-  };
   reactExports.useEffect(() => {
     if (!modalShownRef.current) {
       handleOpenModal();
@@ -22457,7 +22458,7 @@ const CardForm = () => {
   return /* @__PURE__ */ jsxs(Fragment, { children: [
     /* @__PURE__ */ jsxs(CardFormProvider, { children: [
       /* @__PURE__ */ jsx$1(Flex, { children: /* @__PURE__ */ jsx$1(CardPreview, {}) }),
-      /* @__PURE__ */ jsx$1(CardFormLayout, { disabled: !allValid, onSubmit: handleCardFormSubmit, children: /* @__PURE__ */ jsxs(Stack, { children: [
+      /* @__PURE__ */ jsx$1(CardFormLayout, { children: /* @__PURE__ */ jsxs(Stack, { children: [
         /* @__PURE__ */ jsx$1(Stack.Step, { name: "카드번호", children: /* @__PURE__ */ jsx$1(CardNumberForm, { onNext: () => setStep("카드사") }) }),
         /* @__PURE__ */ jsx$1(Stack.Step, { name: "카드사", children: /* @__PURE__ */ jsx$1(BrandForm, { onNext: () => setStep("유효기간") }) }),
         /* @__PURE__ */ jsx$1(Stack.Step, { name: "유효기간", children: /* @__PURE__ */ jsx$1(ExpireDateForm, { onNext: () => setStep("CVC") }) }),
@@ -22483,6 +22484,7 @@ const Confirm = () => {
   const goActiveCard = () => {
     navigate("/card/activate");
   };
+  console.log("location.state", location.state);
   if (location.state === null) {
     return /* @__PURE__ */ jsx$1(Flex, { width: "100%", height: "100dvh", children: /* @__PURE__ */ jsxs(Flex, { direction: "column", width: "100%", gap: "40px", padding: "0 30px", children: [
       /* @__PURE__ */ jsx$1(
