@@ -1,3 +1,6 @@
+import { useEffect, useRef } from 'react';
+
+import { useModal } from '@sebin0580/modal';
 import { useNavigate } from 'react-router-dom';
 
 import { Flex } from '@/components/common/Flex';
@@ -8,6 +11,7 @@ import { ExpireDateForm } from '@/components/features/CardFormFiled/ExpireDateFo
 import { PassWordForm } from '@/components/features/CardFormFiled/PassWordForm';
 import { CardFormLayout } from '@/components/features/CardFormLayout';
 import { CardPreview } from '@/components/features/CardPreview';
+import { UserConsentModal } from '@/components/features/UserConsentModal';
 import { STEPS, StepType } from '@/constants/stackStep';
 import { CardFormProvider } from '@/context/cardFormContext';
 import { useCardForm } from '@/hooks/useCardForm';
@@ -16,7 +20,9 @@ import { useStack } from '@/hooks/useStack';
 export const CardForm = () => {
   const navigate = useNavigate();
   const { Stack, setStep } = useStack<StepType>(STEPS.CARD_NUMBER);
+  const { isOpen, handleOpenModal, handleCloseModal } = useModal();
   const { formData } = useCardForm();
+  const modalShownRef = useRef(false);
 
   const isFilledAndValid = (item: { value: string; isValid: boolean }) =>
     item.value !== '' && item.isValid;
@@ -39,31 +45,46 @@ export const CardForm = () => {
     });
   };
 
-  return (
-    <CardFormProvider>
-      <Flex>
-        <CardPreview />
-      </Flex>
+  useEffect(() => {
+    if (!modalShownRef.current) {
+      handleOpenModal();
+      modalShownRef.current = true;
+    }
+  }, [handleOpenModal]);
 
-      <CardFormLayout disabled={!allValid} onSubmit={handleCardFormSubmit}>
-        <Stack>
-          <Stack.Step name="카드번호">
-            <CardNumberForm onNext={() => setStep('카드사')} />
-          </Stack.Step>
-          <Stack.Step name="카드사">
-            <BrandForm onNext={() => setStep('유효기간')} />
-          </Stack.Step>
-          <Stack.Step name="유효기간">
-            <ExpireDateForm onNext={() => setStep('CVC')} />
-          </Stack.Step>
-          <Stack.Step name="CVC">
-            <CVCForm onNext={() => setStep('비밀번호')} />
-          </Stack.Step>
-          <Stack.Step name="비밀번호">
-            <PassWordForm onNext={() => setStep('비밀번호')} />
-          </Stack.Step>
-        </Stack>
-      </CardFormLayout>
-    </CardFormProvider>
+  return (
+    <>
+      <CardFormProvider>
+        <Flex>
+          <CardPreview />
+        </Flex>
+
+        <CardFormLayout disabled={!allValid} onSubmit={handleCardFormSubmit}>
+          <Stack>
+            <Stack.Step name="카드번호">
+              <CardNumberForm onNext={() => setStep('카드사')} />
+            </Stack.Step>
+            <Stack.Step name="카드사">
+              <BrandForm onNext={() => setStep('유효기간')} />
+            </Stack.Step>
+            <Stack.Step name="유효기간">
+              <ExpireDateForm onNext={() => setStep('CVC')} />
+            </Stack.Step>
+            <Stack.Step name="CVC">
+              <CVCForm onNext={() => setStep('비밀번호')} />
+            </Stack.Step>
+            <Stack.Step name="비밀번호">
+              <PassWordForm onNext={() => setStep('비밀번호')} />
+            </Stack.Step>
+          </Stack>
+        </CardFormLayout>
+      </CardFormProvider>
+      <UserConsentModal
+        maxWidth="500px"
+        isOpen={isOpen}
+        title="약관에 동의해주세요."
+        onClose={handleCloseModal}
+      />
+    </>
   );
 };
