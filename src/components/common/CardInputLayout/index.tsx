@@ -1,6 +1,6 @@
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useEffect, useState } from 'react';
 
-import { css } from '@emotion/react';
+import { css, keyframes } from '@emotion/react';
 
 import { Flex } from '@/components/common/Flex';
 import { Text } from '@/components/common/Text';
@@ -20,7 +20,24 @@ export type Props = {
   label?: string;
 } & PropsWithChildren;
 
+const fadeInUp = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
 export const CardInputLayout = ({ headerText, description, label, children }: Props) => {
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   return (
     <Flex
       direction="column"
@@ -30,6 +47,7 @@ export const CardInputLayout = ({ headerText, description, label, children }: Pr
       flex={0}
       css={css`
         max-width: 500px;
+        animation: ${mounted ? fadeInUp : 'none'} 0.3s ease-out;
       `}
     >
       <Text variant="Title" fontWeight="bold">
