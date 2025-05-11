@@ -1,19 +1,19 @@
-import { css } from '@emotion/react';
+import { Button, useModal } from '@sebin0580/modal';
 
 import { CardFormProps } from './CardFormFiled.types';
 
 import { CardInputLayout } from '../../common/CardInputLayout';
-import { Flex } from '@/components/common/Flex';
-import { Select } from '@/components/common/Select';
-import { CARD_BRAND_COLORS, CardBrand } from '@/constants/brandColors';
+import { CardBrandModal } from '../CardBrandModal';
+// import { Button } from '@/components/common/Button';
+import { CardBrand } from '@/constants/cardBrand';
 import { useCardForm } from '@/hooks/useCardForm';
-
-const categories = Object.keys(CARD_BRAND_COLORS);
 
 export const BrandForm = ({ onNext }: CardFormProps) => {
   const { formData: brandFormData, dispatch: setBrandFormData } = useCardForm();
+  const { isOpen, handleOpenModal, handleCloseModal } = useModal();
 
   const handleClickOption = (option: CardBrand) => {
+    console.log('option', option);
     setBrandFormData({
       type: 'BRAND',
       payload: { ...brandFormData, brand: option },
@@ -22,31 +22,21 @@ export const BrandForm = ({ onNext }: CardFormProps) => {
   };
 
   return (
-    <CardInputLayout
-      headerText="카드사를 선택해 주세요."
-      description="현재 국내 카드사만 가능합니다."
-    >
-      <Flex
-        direction="column"
-        alignItems="flex-start"
-        width="100%"
-        gap="4px"
-        css={css`
-          margin-bottom: 20px;
-        `}
+    <>
+      <CardInputLayout
+        headerText="카드사를 선택해 주세요."
+        description="현재 국내 카드사만 가능합니다."
       >
-        <Select selectedOptions={brandFormData.brand ?? '전체'}>
-          {categories.map((category) => (
-            <Select.Option
-              key={category}
-              option={category}
-              onSelectOption={() => handleClickOption(category as CardBrand)}
-            >
-              {category}
-            </Select.Option>
-          ))}
-        </Select>
-      </Flex>
-    </CardInputLayout>
+        <Button size="xl" width="100%" color="#333333" shape="rounded" onClick={handleOpenModal}>
+          카드사 선택하기
+        </Button>
+      </CardInputLayout>
+      <CardBrandModal
+        isOpen={isOpen}
+        onClose={handleCloseModal}
+        title="카드사 선택"
+        onSelectBrand={handleClickOption}
+      />
+    </>
   );
 };
