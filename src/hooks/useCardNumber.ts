@@ -60,7 +60,7 @@ export const useCardNumber = ({ cardNumbers, setCardNumbers, onValid }: Props) =
         onValid();
       }
     },
-    [cardNumbers]
+    [cardNumbers, moveFocusToNext, onValid, setCardNumbers, validateInput]
   );
 
   const setInputRef = useCallback((el: HTMLInputElement | null, index: number) => {
