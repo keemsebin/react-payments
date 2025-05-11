@@ -1,4 +1,4 @@
-import { CardBrand } from '@/constants/brandColors';
+import { CardBrand } from '@/constants/cardBrand';
 
 export type Action = 'CARD_NUMBER' | 'BRAND' | 'EXPIRE_DATE' | 'CVC' | 'PASSWORD';
 
