@@ -47,7 +47,7 @@ export const CardInputLayout = ({ headerText, description, label, children }: Pr
       flex={0}
       css={css`
         max-width: 500px;
-        animation: ${mounted ? fadeInUp : 'none'} 0.3s ease-out;
+        animation: ${mounted ? fadeInUp : 'none'} 0.5s ease-out;
       `}
     >
       <Text variant="Title" fontWeight="bold">
