@@ -1,3 +1,5 @@
+import { useCallback } from 'react';
+
 import { Button, useModal } from '@sebin0580/modal';
 
 import { CardFormProps } from './CardFormFiled.types';
@@ -12,14 +14,16 @@ export const BrandForm = ({ onNext }: CardFormProps) => {
   const { formData: brandFormData, dispatch: setBrandFormData } = useCardForm();
   const { isOpen, handleOpenModal, handleCloseModal } = useModal();
 
-  const handleClickOption = (option: CardBrand) => {
-    console.log('option', option);
-    setBrandFormData({
-      type: 'BRAND',
-      payload: { ...brandFormData, brand: option },
-    });
-    onNext();
-  };
+  const handleClickOption = useCallback(
+    (option: CardBrand) => {
+      setBrandFormData({
+        type: 'BRAND',
+        payload: { ...brandFormData, brand: option },
+      });
+      onNext();
+    },
+    [brandFormData, onNext, setBrandFormData]
+  );
 
   return (
     <>
