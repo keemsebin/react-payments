@@ -22231,7 +22231,6 @@ const CardFormLayout = ({ children }) => {
   const navigate = useNavigate();
   const isFilledAndValid = (item) => item.value !== "" && item.isValid;
   const allValid = formData.cardNumber.every(isFilledAndValid) && formData.expireDate.every(isFilledAndValid) && isFilledAndValid(formData.cvc) && isFilledAndValid(formData.password) && formData.brand !== null;
-  console.log("formData", formData);
   const handleCardFormSubmit = (e2) => {
     e2.preventDefault();
     if (!allValid) return;
@@ -22484,7 +22483,6 @@ const Confirm = () => {
   const goActiveCard = () => {
     navigate("/card/activate");
   };
-  console.log("location.state", location.state);
   if (location.state === null) {
     return /* @__PURE__ */ jsx$1(Flex, { width: "100%", height: "100dvh", children: /* @__PURE__ */ jsxs(Flex, { direction: "column", width: "100%", gap: "40px", padding: "0 30px", children: [
       /* @__PURE__ */ jsx$1(
