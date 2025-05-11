@@ -1,35 +1,48 @@
-import { ComponentProps, ReactNode } from 'react';
+import { ComponentProps, FormEvent, ReactNode } from 'react';
 
 import { css } from '@emotion/react';
+import { useNavigate } from 'react-router-dom';
 
 import { CardFormStyled } from './CardFormLayout.styled';
 
 import { Button } from '@/components/common/Button';
 import { Flex } from '@/components/common/Flex';
+import { useCardForm } from '@/hooks/useCardForm';
 
 export type Props = {
-  /**
-   * Disables the submit button when true.
-   * @default true
-   */
-  disabled?: boolean;
-  /**
-   * Callback function invoked when the form is submitted.
-   */
-  onSubmit: () => void;
   /**
    * Form content to be rendered inside the layout.
    */
   children: ReactNode;
 } & ComponentProps<'form'>;
 
-export const CardFormLayout = ({ disabled = true, onSubmit, children }: Props) => {
-  const handleSubmit = () => {
-    onSubmit();
+export const CardFormLayout = ({ children }: Props) => {
+  const { formData } = useCardForm();
+  const navigate = useNavigate();
+  const isFilledAndValid = (item: { value: string; isValid: boolean }) =>
+    item.value !== '' && item.isValid;
+
+  const allValid =
+    formData.cardNumber.every(isFilledAndValid) &&
+    formData.expireDate.every(isFilledAndValid) &&
+    isFilledAndValid(formData.cvc) &&
+    isFilledAndValid(formData.password) &&
+    formData.brand !== null;
+
+  const handleCardFormSubmit = (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!allValid) return;
+
+    navigate('/card/confirm', {
+      state: {
+        cardNumber: formData.cardNumber[0],
+        brand: formData.brand,
+      },
+    });
   };
 
   return (
-    <CardFormStyled onSubmit={handleSubmit}>
+    <CardFormStyled onSubmit={handleCardFormSubmit}>
       <Flex
         justifyContent="flex-start"
         direction="column"
@@ -47,7 +60,7 @@ export const CardFormLayout = ({ disabled = true, onSubmit, children }: Props) =
           width: 100%;
         `}
       >
-        <Button type="submit" disabled={disabled}>
+        <Button type="submit" disabled={!allValid}>
           확인
         </Button>
       </Flex>
